@@ -13,45 +13,49 @@
 #include "stm32f429i_discovery_lcd.h"
 #include "stm32f429i_discovery_ts.h"
 
-char _100_msec;
+char _100_msec, _1_sec;
 int i;
-uint8_t button;
+uint8_t button1_press;
+int count1;
+uint8_t btn;
+uint8_t oldbtn;
 I2C_HandleTypeDef hi2c3;
 
 void SystemClock_Config(void);
 void MX_USB_HOST_Process(void);
 
-void BLUE_BUTTON(void){
-	BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
+void BLUE_BUTTON (void){
+
+	BSP_LCD_Clear(LCD_COLOR_DARKBLUE);
+	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTBLUE);
 	BSP_LCD_DrawRect(80, 50, 80, 60);
 	BSP_LCD_FillRect(80, 50, 80 , 60);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
+	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTMAGENTA);
 	BSP_LCD_DrawRect(80, 210, 80, 60);
 	BSP_LCD_FillRect(80, 210, 80, 60);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-	BSP_LCD_SetBackColor(LCD_COLOR_LIGHTBLUE);
-	BSP_LCD_SetFont(&Font16);
-	BSP_LCD_DisplayStringAt(0, 30, (uint8_t *)" I'm BLUE", CENTER_MODE);
+    BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+    BSP_LCD_SetBackColor(LCD_COLOR_DARKBLUE);
+    BSP_LCD_SetFont(&Font16);
+    BSP_LCD_DisplayStringAt(0, 30, (uint8_t *)" I'm BLUE", CENTER_MODE);
+
 }
-void MAGENTA_BUTTON(void){
-	BSP_LCD_Clear(LCD_COLOR_LIGHTMAGENTA);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
+void MAGENTA_BUTTON (void){
+	BSP_LCD_Clear(LCD_COLOR_DARKMAGENTA);
+	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTBLUE);
 	BSP_LCD_DrawRect(80, 50, 80, 60);
 	BSP_LCD_FillRect(80, 50, 80 , 60);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
+	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTMAGENTA);
 	BSP_LCD_DrawRect(80, 210, 80, 60);
 	BSP_LCD_FillRect(80, 210, 80, 60);
-	BSP_LCD_SetBackColor(LCD_COLOR_LIGHTMAGENTA);
-	BSP_LCD_SetFont(&Font16);
-	BSP_LCD_DisplayStringAt(0, 190, (uint8_t *)"I'm MAGENTA", CENTER_MODE);
+    BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+    BSP_LCD_SetBackColor(LCD_COLOR_DARKMAGENTA);
+    BSP_LCD_SetFont(&Font16);
+    BSP_LCD_DisplayStringAt(0, 190, (uint8_t *)"I'm MAGENTA", CENTER_MODE);
 }
 
 int main(void)
 {
   static char temp;
-  static char button_temp;
-  static int count;
   TS_StateTypeDef ts;
 
   HAL_Init();
@@ -85,109 +89,100 @@ int main(void)
   BSP_LCD_DrawRect(80, 50, 80, 60);
   BSP_LCD_FillRect(80, 50, 80 , 60);
 
-//  BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
-//  BSP_LCD_DrawRect(80, 210, 80, 60);
-//  BSP_LCD_FillRect(80, 210, 80, 60);
-//  BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-//  BSP_LCD_SetBackColor(LCD_COLOR_LIGHTGRAY);
-//  BSP_LCD_SetFont(&Font16);
-//  BSP_LCD_DisplayStringAt(0, 145, (uint8_t *)"CAN YOU CLICK", CENTER_MODE);
-//  BSP_LCD_DisplayStringAt(0, 160, (uint8_t *)" MY RECTANGLE?", CENTER_MODE);
-  button_temp = 0;
-  count = 0;
-  temp = 0;
+  BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
+  BSP_LCD_DrawRect(80, 210, 80, 60);
+  BSP_LCD_FillRect(80, 210, 80, 60);
+  BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+  BSP_LCD_SetBackColor(LCD_COLOR_LIGHTGRAY);
+  BSP_LCD_SetFont(&Font16);
+  BSP_LCD_DisplayStringAt(0, 145, (uint8_t *)"CAN YOU CLICK", CENTER_MODE);
+  BSP_LCD_DisplayStringAt(0, 160, (uint8_t *)" MY RECTANGLE?", CENTER_MODE);
+  button1_press = 0;
+//  temp = 0;
+//	BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
+//	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
+//	BSP_LCD_DrawRect(80, 50, 80, 60);
+//	BSP_LCD_FillRect(80, 50, 80 , 60);
+//	BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
+//	BSP_LCD_DrawRect(80, 210, 80, 60);
+//	BSP_LCD_FillRect(80, 210, 80, 60);
+//  BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
+//  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
+//  HAL_Delay(2000);
+//  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
 //  for( uint8_t i=0 ; i<30 ; i++ )
 //	  BSP_LCD_DrawLine( 60 , 120+i , 180 , 120+i );
 //  char x[ 20 ];
   while (1)
   {
+//	  BLUE_BUTTON();
+//	  HAL_Delay(1000);
 
 	if(_100_msec == 1){
 	  _100_msec = 0;
+
 		BSP_TS_GetState(&ts);
-
-//			if(((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)) == 1){
-//				count++;
-//				button_temp = 1;
 //
-//			}
-//			else{
-//				count = 0;
-//				button_temp = 0;
-//
-//			}
-
-			switch(temp){
-			case 0:
-				if(((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)) == 1){
-					count++;
-					temp = 1;
-				}
-//				button_temp = 0;
-				break;
-			case 1:
-				if((((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)) == 0 )&& (((0<=ts.X && ts.X<=240) && (0<=ts.Y && 320>=ts.Y)) == 0)){
-					temp = 0;
-					button = 1;
-				}
-				break;
-			}
-
-			if(button == 1){
-				BLUE_BUTTON();
-			}
-//		case 1:
-//
-//			if((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y) == 1){
-//				BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-//				BSP_LCD_DrawRect(80, 50, 80, 60);
-//				BSP_LCD_FillRect(80, 50, 80 , 60);
-//				count++;
-//				button_temp = 1;
-//
-//			}
-
-//			else if((80<=ts.X && ts.X<=160) && (210<=ts.Y && 270>=ts.Y)){
-////				button_temp = 0;
-//				MAGENTA_BUTTON();
-////				button = 1;
-//			}
-
-		}
-//	ts.X = 0;
-//	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-//	BSP_LCD_DrawRect(80, 50, 80, 60);
-//	BSP_LCD_FillRect(80, 50, 80 , 60);
-////		if(button == 1){
-//			button = 0;
-//		}
-
 //		if((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)){
-//			BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
-//			BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-//			BSP_LCD_DrawRect(80, 50, 80, 60);
-//			BSP_LCD_FillRect(80, 50, 80 , 60);
-//			BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
-//			BSP_LCD_DrawRect(80, 210, 80, 60);
-//			BSP_LCD_FillRect(80, 210, 80, 60);
-//		    BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-//		    BSP_LCD_SetBackColor(LCD_COLOR_LIGHTBLUE);
-//		    BSP_LCD_SetFont(&Font16);
-//		    BSP_LCD_DisplayStringAt(0, 30, (uint8_t *)" I'm BLUE", CENTER_MODE);
+//			oldbtn = btn;
+//			btn = 1;
 //		}
 //		else if((80<=ts.X && ts.X<=160) && (210<=ts.Y && 270>=ts.Y)){
-//			BSP_LCD_Clear(LCD_COLOR_LIGHTMAGENTA);
-//			BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-//			BSP_LCD_DrawRect(80, 50, 80, 60);
-//			BSP_LCD_FillRect(80, 50, 80 , 60);
-//			BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
-//			BSP_LCD_DrawRect(80, 210, 80, 60);
-//			BSP_LCD_FillRect(80, 210, 80, 60);
-//		    BSP_LCD_SetBackColor(LCD_COLOR_LIGHTMAGENTA);
-//		    BSP_LCD_SetFont(&Font16);
-//		    BSP_LCD_DisplayStringAt(0, 190, (uint8_t *)"I'm MAGENTA", CENTER_MODE);
+//			oldbtn = btn;
+//			btn = 2;
+//
+//		}
+//		else{
+//			oldbtn = btn;
+//			btn = 3;
+//
+//		}
+//		if(oldbtn != 1 && btn == 1){
+//			BLUE_BUTTON();
+//
+//		}
+//		if(oldbtn != 2 && btn == 2){
+//			MAGENTA_BUTTON();
+//
+//		}
+//		else{
+//				BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
+//				BSP_LCD_DrawRect(80, 210, 80, 60);
+//				BSP_LCD_FillRect(80, 210, 80, 60);
+//				BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+//				BSP_LCD_SetBackColor(LCD_COLOR_LIGHTGRAY);
+//				BSP_LCD_SetFont(&Font16);
+//				BSP_LCD_DisplayStringAt(0, 145, (uint8_t *)"CAN YOU CLICK", CENTER_MODE);
+//				BSP_LCD_DisplayStringAt(0, 160, (uint8_t *)" MY RECTANGLE?", CENTER_MODE);
 //		}
 
+
+	  	  if((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)){
+	  		  button1_press = 1;
+	  	  }
+	  	  else if((80<=ts.X && ts.X<=160) && (210<=ts.Y && 270>=ts.Y)){
+	  		  button1_press = 2;
+	  	  }
+//	}
+//	  	  if(_1_sec == 1){
+//	  		  _1_sec =0;
+
+		  switch(temp){
+		  case 0:
+			  if ( button1_press == 1 ){
+
+				BLUE_BUTTON();
+				temp = 1;
+			  }
+			  break;
+		  case 1:
+			  if ( button1_press == 2 ){
+				MAGENTA_BUTTON();
+				temp = 0;
+			  }
+			  break;
+		  }
+	  	  }
 //		  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 
 //    MX_USB_HOST_Process();
@@ -263,8 +258,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   /* USER CODE BEGIN Callback 0 */
 if(htim->Instance == TIM1){
-	_100_msec = 1;
 	i++;
+	if((i % 10) == 0){
+		_1_sec = 1;
+	}
+	_100_msec = 1;
+
 }
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM6) {
