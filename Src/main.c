@@ -119,47 +119,6 @@ int main(void)
 		ts.Y = 0;
 
 
-		if ( button1_press == 1 ){
-			BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
-			BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-			BSP_LCD_DrawRect(80, 50, 80, 60);
-			BSP_LCD_FillRect(80, 50, 80 , 60);
-			BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
-			BSP_LCD_DrawRect(80, 210, 80, 60);
-			BSP_LCD_FillRect(80, 210, 80, 60);
-			BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-			BSP_LCD_SetBackColor(LCD_COLOR_LIGHTBLUE);
-			BSP_LCD_SetFont(&Font16);
-			BSP_LCD_DisplayStringAt(0, 30, (uint8_t *)" I'm BLUE", CENTER_MODE);
-			temp++;
-		}
-
-		else if ( button1_press == 2 ){
-			BSP_LCD_Clear(LCD_COLOR_LIGHTMAGENTA);
-			BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-			BSP_LCD_DrawRect(80, 50, 80, 60);
-			BSP_LCD_FillRect(80, 50, 80 , 60);
-			BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
-			BSP_LCD_DrawRect(80, 210, 80, 60);
-			BSP_LCD_FillRect(80, 210, 80, 60);
-			BSP_LCD_SetBackColor(LCD_COLOR_LIGHTMAGENTA);
-			BSP_LCD_SetFont(&Font16);
-			BSP_LCD_DisplayStringAt(0, 190, (uint8_t *)"I'm MAGENTA", CENTER_MODE);
-			temp++;
-		}
-//
-//		else{
-//			BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
-//			BSP_LCD_DrawRect(80, 210, 80, 60);
-//			BSP_LCD_FillRect(80, 210, 80, 60);
-//			BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-//			BSP_LCD_SetBackColor(LCD_COLOR_LIGHTGRAY);
-//			BSP_LCD_SetFont(&Font16);
-//			BSP_LCD_DisplayStringAt(0, 145, (uint8_t *)"CAN YOU CLICK", CENTER_MODE);
-//			BSP_LCD_DisplayStringAt(0, 160, (uint8_t *)" MY RECTANGLE?", CENTER_MODE);
-//			temp++;
-//
-//		}
 //		  switch(temp){
 //		  case 0:
 //			  if ( button1_press == 1 ){
@@ -195,26 +154,6 @@ int main(void)
 //			  break;
 //		  }
 //	}
-//		  if ( button1_press == 1 ) {
-//			  	BSP_LCD_Clear(LCD_COLOR_ORANGE);
-//				BSP_LCD_SetTextColor(LCD_COLOR_GREEN);
-//				BSP_LCD_DrawRect(80, 50, 80, 60);
-//				BSP_LCD_FillRect(80, 50, 80 , 60);
-//				BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
-//				BSP_LCD_DrawRect(80, 210, 80, 60);
-//				BSP_LCD_FillRect(80, 210, 80, 60);
-//		  }
-//
-//		  else {
-//			    BSP_LCD_Clear(LCD_COLOR_GRAY);
-//				BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
-//				BSP_LCD_DrawRect(80, 50, 80, 60);
-//				BSP_LCD_FillRect(80, 50, 80 , 60);
-//				BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
-//				BSP_LCD_DrawRect(80, 210, 80, 60);
-//				BSP_LCD_FillRect(80, 210, 80, 60);
-//		  }
-
 //		  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 
 //    MX_USB_HOST_Process();
