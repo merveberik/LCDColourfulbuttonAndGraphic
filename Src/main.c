@@ -13,9 +13,12 @@
 #include "stm32f429i_discovery_lcd.h"
 #include "stm32f429i_discovery_ts.h"
 
+  TS_StateTypeDef ts;
+
 char _100_msec, _1_sec;
 int i;
 uint8_t button1_press;
+uint8_t button2_press;
 int count1;
 uint8_t btn;
 uint8_t oldbtn;
@@ -26,37 +29,37 @@ void MX_USB_HOST_Process(void);
 
 void BLUE_BUTTON (void){
 
-	BSP_LCD_Clear(LCD_COLOR_DARKBLUE);
-	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTBLUE);
+	BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
+	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
 	BSP_LCD_DrawRect(80, 50, 80, 60);
 	BSP_LCD_FillRect(80, 50, 80 , 60);
-	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTMAGENTA);
+	BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
 	BSP_LCD_DrawRect(80, 210, 80, 60);
 	BSP_LCD_FillRect(80, 210, 80, 60);
     BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-    BSP_LCD_SetBackColor(LCD_COLOR_DARKBLUE);
+    BSP_LCD_SetBackColor(LCD_COLOR_LIGHTBLUE);
     BSP_LCD_SetFont(&Font16);
     BSP_LCD_DisplayStringAt(0, 30, (uint8_t *)" I'm BLUE", CENTER_MODE);
 
 }
 void MAGENTA_BUTTON (void){
-	BSP_LCD_Clear(LCD_COLOR_DARKMAGENTA);
-	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTBLUE);
+	BSP_LCD_Clear(LCD_COLOR_LIGHTMAGENTA);
+	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
 	BSP_LCD_DrawRect(80, 50, 80, 60);
 	BSP_LCD_FillRect(80, 50, 80 , 60);
-	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTMAGENTA);
+	BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
 	BSP_LCD_DrawRect(80, 210, 80, 60);
 	BSP_LCD_FillRect(80, 210, 80, 60);
     BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-    BSP_LCD_SetBackColor(LCD_COLOR_DARKMAGENTA);
+    BSP_LCD_SetBackColor(LCD_COLOR_LIGHTMAGENTA);
     BSP_LCD_SetFont(&Font16);
     BSP_LCD_DisplayStringAt(0, 190, (uint8_t *)"I'm MAGENTA", CENTER_MODE);
 }
 
 int main(void)
 {
-  static char temp;
-  TS_StateTypeDef ts;
+  //static char temp;
+//	uint8_t cntr = 0;
 
   HAL_Init();
 
@@ -113,16 +116,33 @@ int main(void)
 //  for( uint8_t i=0 ; i<30 ; i++ )
 //	  BSP_LCD_DrawLine( 60 , 120+i , 180 , 120+i );
 //  char x[ 20 ];
+  button1_press = 0;
+  button2_press = 0;
+  detect = 0;
   while (1)
   {
-//	  BLUE_BUTTON();
-//	  HAL_Delay(1000);
-
 	if(_100_msec == 1){
 	  _100_msec = 0;
-
 		BSP_TS_GetState(&ts);
-//
+		if(detect == 1){
+			detect = 0;
+			if((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)){
+			  button1_press = 1;
+			}
+			else if((80<=ts.X && ts.X<=160) && (210<=ts.Y && 270>=ts.Y)){
+			  button2_press = 1;
+			}
+		}
+
+		if ( button1_press == 1 ){
+			button1_press = 0;
+			BLUE_BUTTON();
+		}
+		if ( button2_press == 1 ){
+			button2_press = 0;
+			MAGENTA_BUTTON();
+		}
+
 //		if((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)){
 //			oldbtn = btn;
 //			btn = 1;
@@ -145,44 +165,8 @@ int main(void)
 //			MAGENTA_BUTTON();
 //
 //		}
-//		else{
-//				BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
-//				BSP_LCD_DrawRect(80, 210, 80, 60);
-//				BSP_LCD_FillRect(80, 210, 80, 60);
-//				BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-//				BSP_LCD_SetBackColor(LCD_COLOR_LIGHTGRAY);
-//				BSP_LCD_SetFont(&Font16);
-//				BSP_LCD_DisplayStringAt(0, 145, (uint8_t *)"CAN YOU CLICK", CENTER_MODE);
-//				BSP_LCD_DisplayStringAt(0, 160, (uint8_t *)" MY RECTANGLE?", CENTER_MODE);
-//		}
 
-
-	  	  if((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)){
-	  		  button1_press = 1;
-	  	  }
-	  	  else if((80<=ts.X && ts.X<=160) && (210<=ts.Y && 270>=ts.Y)){
-	  		  button1_press = 2;
-	  	  }
-//	}
-//	  	  if(_1_sec == 1){
-//	  		  _1_sec =0;
-
-		  switch(temp){
-		  case 0:
-			  if ( button1_press == 1 ){
-
-				BLUE_BUTTON();
-				temp = 1;
-			  }
-			  break;
-		  case 1:
-			  if ( button1_press == 2 ){
-				MAGENTA_BUTTON();
-				temp = 0;
-			  }
-			  break;
-		  }
-	  	  }
+	}
 //		  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
 
 //    MX_USB_HOST_Process();

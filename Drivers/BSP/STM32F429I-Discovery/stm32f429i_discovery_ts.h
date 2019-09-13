@@ -106,6 +106,7 @@ void    BSP_TS_GetState(TS_StateTypeDef *TsState);
 uint8_t BSP_TS_ITConfig(void);
 uint8_t BSP_TS_ITGetStatus(void);
 void    BSP_TS_ITClear(void);
+uint8_t detect;
 
 /**
   * @}
