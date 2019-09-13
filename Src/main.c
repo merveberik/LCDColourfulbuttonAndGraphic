@@ -101,18 +101,6 @@ int main(void)
   BSP_LCD_DisplayStringAt(0, 145, (uint8_t *)"CAN YOU CLICK", CENTER_MODE);
   BSP_LCD_DisplayStringAt(0, 160, (uint8_t *)" MY RECTANGLE?", CENTER_MODE);
   button1_press = 0;
-//  temp = 0;
-//	BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
-//	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-//	BSP_LCD_DrawRect(80, 50, 80, 60);
-//	BSP_LCD_FillRect(80, 50, 80 , 60);
-//	BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
-//	BSP_LCD_DrawRect(80, 210, 80, 60);
-//	BSP_LCD_FillRect(80, 210, 80, 60);
-//  BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-//  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_SET);
-//  HAL_Delay(2000);
-//  HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, GPIO_PIN_RESET);
 //  for( uint8_t i=0 ; i<30 ; i++ )
 //	  BSP_LCD_DrawLine( 60 , 120+i , 180 , 120+i );
 //  char x[ 20 ];
