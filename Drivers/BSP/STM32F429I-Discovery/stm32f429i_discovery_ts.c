@@ -161,6 +161,7 @@ void BSP_TS_GetState(TS_StateTypeDef* TsState)
   
   if(TsState->TouchDetected)
   {
+	  detect = 1;
     TsDrv->GetXY(TS_I2C_ADDRESS, &x, &y);
     
     /* Y value first correction */
