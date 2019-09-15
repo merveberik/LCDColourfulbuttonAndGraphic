@@ -135,12 +135,7 @@ int main(void)
 			}
 		}
 	}
-//		  HAL_GPIO_TogglePin(LD3_GPIO_Port, LD3_Pin);
-
-//    MX_USB_HOST_Process();
-
   }
-  /* USER CODE END 3 */
 }
 
 /**
