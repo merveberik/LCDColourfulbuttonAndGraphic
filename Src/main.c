@@ -18,8 +18,6 @@
 char _100_msec, _1_sec;
 int i;
 uint8_t button_press;
-uint8_t button1_press;
-uint8_t button2_press;
 int count1;
 uint8_t btn;
 uint8_t oldbtn;
@@ -101,12 +99,8 @@ int main(void)
   BSP_LCD_SetFont(&Font16);
   BSP_LCD_DisplayStringAt(0, 145, (uint8_t *)"CAN YOU CLICK", CENTER_MODE);
   BSP_LCD_DisplayStringAt(0, 160, (uint8_t *)" MY RECTANGLE?", CENTER_MODE);
-  button1_press = 0;
 //  for( uint8_t i=0 ; i<30 ; i++ )
 //	  BSP_LCD_DrawLine( 60 , 120+i , 180 , 120+i );
-//  char x[ 20 ];
-  button1_press = 0;
-  button2_press = 0;
   button_press=0;
 
   detect = 0;
