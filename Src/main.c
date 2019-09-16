@@ -9,7 +9,7 @@
 #include "usb_host.h"
 #include "gpio.h"
 #include "fmc.h"
-
+#include "math.h"
 #include "stm32f429i_discovery_lcd.h"
 #include "stm32f429i_discovery_ts.h"
 
@@ -21,38 +21,87 @@ uint8_t button_press;
 int count1;
 uint8_t btn;
 uint8_t oldbtn;
+int x, y;
 I2C_HandleTypeDef hi2c3;
-
+char returning;
 void SystemClock_Config(void);
 void MX_USB_HOST_Process(void);
 
-void BLUE_BUTTON (void){
+void BACK_RECT (void){
+
+	BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
+	BSP_LCD_DrawRect(30, 250, 80, 40);
+	BSP_LCD_FillRect(30, 250, 80, 40);
+	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+	BSP_LCD_SetBackColor(LCD_COLOR_MAGENTA);
+	BSP_LCD_SetFont(&Font12);
+	BSP_LCD_DisplayStringAt(55, 265, (uint8_t *)"BACK", LEFT_MODE);
+}
+
+void GRAPHICS (void){
 
 	BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-	BSP_LCD_DrawRect(80, 50, 80, 60);
-	BSP_LCD_FillRect(80, 50, 80 , 60);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
-	BSP_LCD_DrawRect(80, 210, 80, 60);
-	BSP_LCD_FillRect(80, 210, 80, 60);
+	BSP_LCD_SetTextColor(LCD_COLOR_DARKCYAN);
+	BSP_LCD_DrawRect(30, 90, 80, 50);
+	BSP_LCD_FillRect(30, 90, 80, 50);
     BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-    BSP_LCD_SetBackColor(LCD_COLOR_LIGHTBLUE);
-    BSP_LCD_SetFont(&Font16);
-    BSP_LCD_DisplayStringAt(0, 30, (uint8_t *)" I'm BLUE", CENTER_MODE);
+    BSP_LCD_SetBackColor(LCD_COLOR_DARKCYAN);
+    BSP_LCD_SetFont(&Font12);
+    BSP_LCD_DisplayStringAt(32, 110, (uint8_t *)"Sinus Graph", LEFT_MODE);
+	BACK_RECT();
 
 }
-void MAGENTA_BUTTON (void){
-	BSP_LCD_Clear(LCD_COLOR_LIGHTMAGENTA);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKBLUE);
-	BSP_LCD_DrawRect(80, 50, 80, 60);
-	BSP_LCD_FillRect(80, 50, 80 , 60);
-	BSP_LCD_SetTextColor(LCD_COLOR_DARKMAGENTA);
-	BSP_LCD_DrawRect(80, 210, 80, 60);
-	BSP_LCD_FillRect(80, 210, 80, 60);
+
+void ABOUT (void){
+
+	BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
+	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+	BSP_LCD_SetBackColor(LCD_COLOR_LIGHTBLUE);
+	BSP_LCD_SetFont(&Font16);
+	BSP_LCD_DisplayStringAtLine(1,(uint8_t*)"BILKON LTD.STI");
+	BACK_RECT();
+
+}
+
+void LCD_INIT(void){
+	BSP_LCD_Clear(LCD_COLOR_LIGHTGRAY);
+	BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
+	BSP_LCD_DrawRect(30, 30, 80, 50);
+	BSP_LCD_FillRect(30, 30, 80 , 50);
+	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+	BSP_LCD_SetBackColor(LCD_COLOR_BLUE);
+	BSP_LCD_SetFont(&Font12);
+	BSP_LCD_DisplayStringAt(42, 50, (uint8_t *)"Graphics", LEFT_MODE);
+
+	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTBLUE);
+	BSP_LCD_DrawRect(120, 250, 80, 40);
+	BSP_LCD_FillRect(120, 250, 80, 40);
+	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+	BSP_LCD_SetBackColor(LCD_COLOR_LIGHTBLUE);
+	BSP_LCD_SetFont(&Font12);
+	BSP_LCD_DisplayStringAt(140, 262, (uint8_t *)"About", LEFT_MODE);
+}
+
+void SIN_GRAPH(void){
+	BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
+	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+	BSP_LCD_DrawHLine(40, 220, 160);
+	BSP_LCD_DrawVLine(40, 60, 160);
+	BSP_LCD_DrawHLine(40, 220, 160);
     BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-    BSP_LCD_SetBackColor(LCD_COLOR_LIGHTMAGENTA);
-    BSP_LCD_SetFont(&Font16);
-    BSP_LCD_DisplayStringAt(0, 190, (uint8_t *)"I'm MAGENTA", CENTER_MODE);
+    BSP_LCD_SetBackColor(LCD_COLOR_DARKCYAN);
+    BSP_LCD_SetFont(&Font12);
+    BSP_LCD_DisplayStringAt(100, 225, (uint8_t *)"x-axis", LEFT_MODE);
+    BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
+    BSP_LCD_SetBackColor(LCD_COLOR_DARKCYAN);
+    BSP_LCD_SetFont(&Font12);
+    BSP_LCD_DisplayStringAt(23, 45, (uint8_t *)"y-axis", LEFT_MODE);
+	BACK_RECT();
+//	  BSP_LCD_DrawRect(80, 80, 80, 40);
+//	  for(unsigned int a = 0; a < (76800); a++)
+//	  {
+//	    BSP_LCD_DrawPixel(a % 240, a / 240, LCD_COLOR_BLACK);
+//	  }
 }
 
 int main(void)
@@ -81,24 +130,12 @@ int main(void)
   BSP_LCD_LayerDefaultInit(LCD_BACKGROUND_LAYER, LCD_FRAME_BUFFER);
   BSP_LCD_SelectLayer(LCD_BACKGROUND_LAYER);
   BSP_LCD_DisplayOn();
-  BSP_LCD_Clear(LCD_COLOR_LIGHTGRAY);
   BSP_LCD_SetTextColor(LCD_COLOR_BLACK);//0x253617);
   BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
-
   BSP_TS_Init(240, 320);
 
-  BSP_LCD_SetTextColor(LCD_COLOR_BLUE);
-  BSP_LCD_DrawRect(80, 50, 80, 60);
-  BSP_LCD_FillRect(80, 50, 80 , 60);
+  LCD_INIT();
 
-  BSP_LCD_SetTextColor(LCD_COLOR_MAGENTA);
-  BSP_LCD_DrawRect(80, 210, 80, 60);
-  BSP_LCD_FillRect(80, 210, 80, 60);
-  BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
-  BSP_LCD_SetBackColor(LCD_COLOR_LIGHTGRAY);
-  BSP_LCD_SetFont(&Font16);
-  BSP_LCD_DisplayStringAt(0, 145, (uint8_t *)"CAN YOU CLICK", CENTER_MODE);
-  BSP_LCD_DisplayStringAt(0, 160, (uint8_t *)" MY RECTANGLE?", CENTER_MODE);
 //  for( uint8_t i=0 ; i<30 ; i++ )
 //	  BSP_LCD_DrawLine( 60 , 120+i , 180 , 120+i );
   button_press=0;
@@ -111,27 +148,35 @@ int main(void)
 		BSP_TS_GetState(&ts);
 		if(detect == 1){
 			detect = 0;
-			if((80<=ts.X && ts.X<=160) && (50<=ts.Y && 110>=ts.Y)){
+			if((30<=ts.X && ts.X<=110) && (30<=ts.Y && 80>=ts.Y)){
 				oldbtn = button_press;
 				button_press = 1;
 			}
-			else if((80<=ts.X && ts.X<=160) && (210<=ts.Y && 270>=ts.Y)){
+			else if((120<=ts.X && ts.X<=200) && (250<=ts.Y && 290>=ts.Y)){
 				oldbtn = button_press;
 				button_press = 2;
 
 			}
-			else{
-				oldbtn = btn;
-				btn = 3;
-
+			else if((30<=ts.X && ts.X<=110) && (250<=ts.Y && 290>=ts.Y)){
+					oldbtn = button_press;
+					button_press = 3;
 			}
-			if(oldbtn != 1 && button_press == 1){
-				BLUE_BUTTON();
+			else if((30<=ts.X && ts.X<=110) && (90<=ts.Y && 140>=ts.Y)){
+					oldbtn = button_press;
+					button_press = 4;
+			}
 
+			if(oldbtn != 1 && button_press == 1){
+				GRAPHICS();
 			}
 			if(oldbtn != 2 && button_press == 2){
-				MAGENTA_BUTTON();
-
+				ABOUT();
+			}
+			if(oldbtn != 3 && button_press == 3){
+				LCD_INIT();
+			}
+			if(oldbtn != 4 && button_press == 4){
+				SIN_GRAPH();
 			}
 		}
 	}
