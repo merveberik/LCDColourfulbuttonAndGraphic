@@ -18,10 +18,13 @@
 char _100_msec, _1_sec;
 int i;
 uint8_t button_press;
-int count1;
+int count1, m;
+uint8_t y;
 uint8_t btn;
+//uint8_t y;
 uint8_t oldbtn;
-int x, y;
+
+
 I2C_HandleTypeDef hi2c3;
 char returning;
 void SystemClock_Config(void);
@@ -58,7 +61,8 @@ void ABOUT (void){
 	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
 	BSP_LCD_SetBackColor(LCD_COLOR_LIGHTBLUE);
 	BSP_LCD_SetFont(&Font16);
-	BSP_LCD_DisplayStringAtLine(1,(uint8_t*)"BILKON LTD.STI");
+	BSP_LCD_DisplayStringAtLine(1,(uint8_t*)" BILKON LTD.STI");
+	BSP_LCD_DisplayStringAtLine(3,(uint8_t*)" MERVE BERIK");
 	BACK_RECT();
 
 }
@@ -81,8 +85,16 @@ void LCD_INIT(void){
 	BSP_LCD_SetFont(&Font12);
 	BSP_LCD_DisplayStringAt(140, 262, (uint8_t *)"About", LEFT_MODE);
 }
-
+//void loop(int val){
+//	int i;
+//	for(i = 0; i < val; i++){
+//	}
+//}
 void SIN_GRAPH(void){
+static int i;
+static int val;
+i = 0;
+val = 1000;
 	BSP_LCD_Clear(LCD_COLOR_LIGHTBLUE);
 	BSP_LCD_SetTextColor(LCD_COLOR_BLACK);
 	BSP_LCD_DrawHLine(40, 220, 160);
@@ -97,11 +109,17 @@ void SIN_GRAPH(void){
     BSP_LCD_SetFont(&Font12);
     BSP_LCD_DisplayStringAt(23, 45, (uint8_t *)"y-axis", LEFT_MODE);
 	BACK_RECT();
-//	  BSP_LCD_DrawRect(80, 80, 80, 40);
-//	  for(unsigned int a = 0; a < (76800); a++)
-//	  {
-//	    BSP_LCD_DrawPixel(a % 240, a / 240, LCD_COLOR_BLACK);
-//	  }
+	for(uint8_t x=0, y=0; x<150; x++, y++){
+		for(i = 0; i < val; i++){
+			x=y;
+			BSP_LCD_DrawPixel(40+x, 220-y, LCD_COLOR_BLACK);
+//			loop(15000);
+		}
+	}
+//	for(uint8_t x=0; x<20; x++){
+//		y=sin(x);
+//		BSP_LCD_DrawPixel(x, y, LCD_COLOR_BLACK);
+//	}
 }
 
 int main(void)
@@ -139,15 +157,17 @@ int main(void)
 //  for( uint8_t i=0 ; i<30 ; i++ )
 //	  BSP_LCD_DrawLine( 60 , 120+i , 180 , 120+i );
   button_press=0;
-
+m = 0;
   detect = 0;
   while (1)
   {
 	if(_100_msec == 1){
 	  _100_msec = 0;
 		BSP_TS_GetState(&ts);
+
 		if(detect == 1){
 			detect = 0;
+
 			if((30<=ts.X && ts.X<=110) && (30<=ts.Y && 80>=ts.Y)){
 				oldbtn = button_press;
 				button_press = 1;
@@ -177,6 +197,7 @@ int main(void)
 			}
 			if(oldbtn != 4 && button_press == 4){
 				SIN_GRAPH();
+
 			}
 		}
 	}
@@ -253,9 +274,9 @@ if(htim->Instance == TIM1){
 	i++;
 	if((i % 10) == 0){
 		_1_sec = 1;
+		m++;
 	}
 	_100_msec = 1;
-
 }
   /* USER CODE END Callback 0 */
   if (htim->Instance == TIM6) {
